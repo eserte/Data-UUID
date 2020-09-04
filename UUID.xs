@@ -374,6 +374,9 @@ CODE:
       get_random_info(seed);
       seed[0] |= 0x80;
       memcpy(&(RETVAL->nodeid), seed, sizeof(uuid_node_t));
+      /* XXX always use pid in state */
+      pid_t *hate = (pid_t *) &(RETVAL->nodeid);
+      *hate += getpid();
 #if 0
       mask = umask(_DEFAULT_UMASK);
       if ((fd = fopen(UUID_NODEID_NV_STORE, "wb"))) {
