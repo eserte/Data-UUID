@@ -356,6 +356,7 @@ PREINIT:
    UV             one = 1;
 CODE:
    RETVAL = (uuid_context_t *)PerlMemShared_malloc(sizeof(uuid_context_t));
+#if 0
    if ((fd = fopen(UUID_STATE_NV_STORE, "rb"))) {
       fread(&(RETVAL->state), sizeof(uuid_state_t), 1, fd);
       fclose(fd);
@@ -369,9 +370,11 @@ CODE:
       
       *hate += getpid();
    } else {
+#endif
       get_random_info(seed);
       seed[0] |= 0x80;
       memcpy(&(RETVAL->nodeid), seed, sizeof(uuid_node_t));
+#if 0
       mask = umask(_DEFAULT_UMASK);
       if ((fd = fopen(UUID_NODEID_NV_STORE, "wb"))) {
          fwrite(&(RETVAL->nodeid), sizeof(uuid_node_t), 1, fd);
@@ -379,6 +382,7 @@ CODE:
       };
       umask(mask);
    }
+#endif
    errno = 0;
 #if DU_THREADSAFE
    MUTEX_LOCK(&instances_mutex);
@@ -415,6 +419,7 @@ PPCODE:
    self->state.node = self->nodeid;
    self->state.ts   = timestamp;
    self->state.cs   = clockseq;
+#if 0
    if (timestamp > self->next_save ) {
       mask = umask(_DEFAULT_UMASK);
       if((fd = fopen(UUID_STATE_NV_STORE, "wb"))) {
@@ -426,6 +431,7 @@ PPCODE:
       umask(mask);
       self->next_save = timestamp + (10 * 10 * 1000 * 1000);
    }
+#endif
    ST(0) = make_ret(uuid, ix);
    XSRETURN(1);
 
@@ -585,6 +591,7 @@ CODE:
    MUTEX_UNLOCK(&instances_mutex);
    if (count == 0) {
 #endif
+#if 0
       mask = umask(_DEFAULT_UMASK);
       if ((fd = fopen(UUID_STATE_NV_STORE, "wb"))) {
          LOCK(fd);
@@ -593,6 +600,7 @@ CODE:
          fclose(fd);
       };
       umask(mask);
+#endif
       PerlMemShared_free(self);
 #if DU_THREADSAFE
    }

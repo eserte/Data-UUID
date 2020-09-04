@@ -134,7 +134,9 @@ typedef struct _uuid_state_t {
 typedef struct _uuid_context_t {
    uuid_state_t state;
    uuid_node_t  nodeid;
+#if 0
    perl_uuid_time_t  next_save;
+#endif
 } uuid_context_t;
 
 static void format_uuid_v1(
